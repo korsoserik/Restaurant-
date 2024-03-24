@@ -1,33 +1,25 @@
 {
   "menu": [
     {
-      "id": 1,
+      "id": "1",
       "name_dish": "something",
       "price": "000currency",
       "available": "0",
       "img_url": "https://somewhere",
       "description": "xyz2"
-    },
-    {
-      "id": 2,
-      "name_dish": "something2",
-      "price": "000currency",
-      "available": "0",
-      "img_url": "https://somewhere2",
-      "description": "xyz2"
     }
   ],
   "orders": [
     {
-      "id": 1,
+      "id": "1",
       "guest_name": "Someone",
-      "ordered": "something",
+      "ordered": "something2",
       "order_started": "00:00",
       "status": "In progress",
       "additional_entry": ""
     },
     {
-      "id": 2,
+      "id": "2",
       "guest_name": "Someone else",
       "ordered": "something2",
       "order_started": "00:00",
@@ -37,7 +29,7 @@
   ],
   "admins": [
     {
-      "id": 1,
+      "id": "1",
       "name": "admin",
       "password": "admin"
     }

@@ -5,6 +5,27 @@ export default class Orders {
         this.BACKEND = new Backend();
         this.h1 = document.querySelector('.this');
         this.refreshTable();
+        this.giveOutEventHandlers();
+    }
+    async giveOutEventHandlers() {
+        document.querySelector('#update').addEventListener('click', (e) => {
+            e.preventDefault();
+            let updated_Data = {
+                id: document.querySelector('#idField').value,
+                guest_name: document.querySelector('#nameField').value,
+                ordered: document.querySelector('#dishField').value,
+                order_started: document.querySelector('#timeField').value,
+                status: document.querySelector('#statusField').value,
+                additional_entry: document.querySelector('#plusField').value
+            };
+            document.querySelector('#modifyOrder').style.display = "none";
+            this.BACKEND.updateData('orders', updated_Data);
+            setTimeout(() => { this.refreshTable(); }, 100);
+        });
+        document.querySelector('#cancelUpdate').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.querySelector('#modifyOrder').style.display = "none";
+        });
     }
     async getMenu() {
         let items = await this.BACKEND.getData('menu');
@@ -22,25 +43,16 @@ export default class Orders {
         table.innerHTML = '';
         let items;
         items = await this.BACKEND.getData('orders');
-        let menu = await this.getMenu();
         items.forEach(item => {
-            console.log(menu, item.ordered);
-            menu.value = item.ordered;
             let tr = document.createElement('tr');
             tr.innerHTML = `
                 <tr>
                     <td>${item.id}</td>
-                    <td><input class="w-100" type="text" value="${item.guest_name}" disabled="true"></td>
-                    <td>
-                        ${menu.outerHTML.toString()}
-                    </td>
+                    <td>${item.guest_name}</td>
+                    <td>${item.ordered}</td>
                     <td>${item.order_started}</td>
-                    <td>
-                        <select class="w-100" disabled="true">
-                            <option value="${item.status}" selected="selected">${item.status}</option>
-                        </select>
-                    </td>
-                    <td><input class="w-100" type="text" value="${item.additional_entry}" disabled="true"></td>
+                    <td>${item.status}</td>
+                    <td>${item.additional_entry}</td>
                 </tr>
             `;
             let td = document.createElement('td');
@@ -48,7 +60,7 @@ export default class Orders {
             btn.textContent = 'Delete';
             btn.type = 'button';
             btn.className = 'btn btn-danger';
-            btn.addEventListener('click', () => { this.BACKEND.deleteData('orders', item.id); this.refreshTable(); });
+            btn.addEventListener('click', () => { this.BACKEND.deleteData('orders', item.id); setTimeout(() => { this.refreshTable(); }, 100); });
             td.append(btn);
             tr.append(td);
             td = document.createElement('td');
@@ -56,7 +68,16 @@ export default class Orders {
             btn.textContent = 'Modify';
             btn.type = 'button';
             btn.className = 'btn btn-warning';
-            btn.addEventListener('click', () => { /*this.BACKEND.modify(user.id)*/ console.log(item.id, item.guest_name); });
+            btn.addEventListener('click', () => {
+                document.querySelector('#modifyOrder').style.display = "block";
+                document.querySelector('#nameField').value = item.guest_name;
+                document.querySelector('#dishField').value = item.ordered;
+                document.querySelector('#statusField').value = item.status;
+                document.querySelector('#plusField').value = item.additional_entry;
+                //hidden
+                document.querySelector('#idField').value = String(item.id);
+                document.querySelector('#timeField').value = item.order_started;
+            });
             td.append(btn);
             tr.append(td);
             table.append(tr);

@@ -28,7 +28,7 @@ export default class Backend{
     // DELETE 
     async deleteData(resource: string, id?:string) {
         // console.log(id);
-        await fetch(`http://localhost:3000/${resource}/`+id,{
+        await fetch(`http://localhost:3000/${resource}?id=`+id,{
             method: "DELETE"
         });
     }
@@ -37,7 +37,7 @@ export default class Backend{
     async updateData(resource: string, data: any) {
         console.log(data);
         
-        await fetch(`http://localhost:3000/${resource}/`+data.id,{
+        await fetch(`http://localhost:3000/${resource}?id=`+data.id,{
             method: 'PUT',
             headers: {
                 "Content-Type": "application/json"

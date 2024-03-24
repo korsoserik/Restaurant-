@@ -24,6 +24,29 @@ export default class Orders{
     h1 = document.querySelector('.this') as HTMLHeadElement;
     constructor(){
         this.refreshTable();
+        this.giveOutEventHandlers();
+    }
+
+    async giveOutEventHandlers() {
+        (document.querySelector('#update') as HTMLButtonElement).addEventListener('click', (e: Event)=>{
+            e.preventDefault();
+            let updated_Data: Order = {
+                id: (document.querySelector('#idField') as HTMLInputElement).value, 
+                guest_name: (document.querySelector('#nameField') as HTMLInputElement).value,
+                ordered: (document.querySelector('#dishField') as HTMLInputElement).value,
+                order_started: (document.querySelector('#timeField') as HTMLInputElement).value,
+                status: (document.querySelector('#statusField') as HTMLInputElement).value,
+                additional_entry: (document.querySelector('#plusField') as HTMLInputElement).value
+            };
+            (document.querySelector('#modifyOrder') as HTMLDivElement).style.display = "none";
+            this.BACKEND.updateData('orders', updated_Data);
+            setTimeout(()=>{this.refreshTable()}, 100);
+            
+        });
+        (document.querySelector('#cancelUpdate') as HTMLButtonElement).addEventListener('click', (e: Event)=>{
+            e.preventDefault();          
+            (document.querySelector('#modifyOrder') as HTMLDivElement).style.display = "none";
+        });
     }
 
     async getMenu(){
@@ -43,27 +66,16 @@ export default class Orders{
         table.innerHTML = '';
         let items : Array<Order>;
         items = await this.BACKEND.getData('orders');
-        let menu: HTMLSelectElement = await this.getMenu();        
-        items.forEach(item =>{  
-            console.log(menu,item.ordered);
-
-            menu.value = item.ordered;
-            
+        items.forEach(item =>{           
             let tr = document.createElement('tr');
             tr.innerHTML =`
                 <tr>
                     <td>${item.id}</td>
-                    <td><input class="w-100" type="text" value="${item.guest_name}" disabled="true"></td>
-                    <td>
-                        ${menu.outerHTML.toString()}
-                    </td>
+                    <td>${item.guest_name}</td>
+                    <td>${item.ordered}</td>
                     <td>${item.order_started}</td>
-                    <td>
-                        <select class="w-100" disabled="true">
-                            <option value="${item.status}" selected="selected">${item.status}</option>
-                        </select>
-                    </td>
-                    <td><input class="w-100" type="text" value="${item.additional_entry}" disabled="true"></td>
+                    <td>${item.status}</td>
+                    <td>${item.additional_entry}</td>
                 </tr>
             `;
             let td = document.createElement('td');
@@ -71,7 +83,7 @@ export default class Orders{
             btn.textContent = 'Delete';
             btn.type='button';
             btn.className = 'btn btn-danger';
-            btn.addEventListener('click',()=> {this.BACKEND.deleteData('orders', item.id); this.refreshTable();});
+            btn.addEventListener('click',()=> {this.BACKEND.deleteData('orders', item.id); setTimeout(()=>{this.refreshTable()}, 100);});
             td.append(btn);
             tr.append(td);
     
@@ -80,7 +92,16 @@ export default class Orders{
             btn.textContent = 'Modify';
             btn.type='button';
             btn.className = 'btn btn-warning';
-            btn.addEventListener('click',()=> {/*this.BACKEND.modify(user.id)*/console.log(item.id, item.guest_name);})
+            btn.addEventListener('click',()=> {
+                (document.querySelector('#modifyOrder') as HTMLDivElement).style.display = "block";
+                (document.querySelector('#nameField') as HTMLInputElement).value = item.guest_name;
+                (document.querySelector('#dishField') as HTMLInputElement).value = item.ordered;
+                (document.querySelector('#statusField') as HTMLInputElement).value = item.status;
+                (document.querySelector('#plusField') as HTMLInputElement).value = item.additional_entry;
+                //hidden
+                (document.querySelector('#idField') as HTMLInputElement).value = String(item.id);
+                (document.querySelector('#timeField') as HTMLInputElement).value = item.order_started;
+            })
             td.append(btn);
             tr.append(td);
     
