@@ -1,14 +1,48 @@
 <h1>Menu</h1>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>*</th>
-            <th>IMG</th>
-            <th>Dish</th>
-            <th>Price</th>
-            <th>Details</th>
-        </tr>
-    </thead>
-    <tbody></tbody>
-</table>
+<div class="container" style="display: none;" id="modifyDish">
+    <h1>Modify dish contents</h1>
+    <div class="row">
+        <input type="text" id="idField" style="display: none;">
+        <input type="text" id="timeField" style="display: none;">
+        <div class="col-3">
+            <label for="nameField">Guest name</label>
+            <input class="form-control" type="text" name="name" id="nameField">
+        </div>
+        <div class="col-3">
+            <label for="dishField">Price of dish</label>
+            <input class="form-control" type="text" name="dish" id="priceField">
+        </div>
+        <div class="col-3">
+            <label for="plusField">IMG URL</label>
+            <input class="form-control" type="text" name="plus" id="imgField">
+        </div>
+        <div class="col-3">
+            <label for="plusField">+</label>
+            <input class="form-control" type="text" name="plus" id="plusField">
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-4 mx-auto">
+            <input class="me-5" type="submit" value="Confirm" id="update">
+            <input type="submit" value="Cancel" id="cancelUpdate">
+        </div>
+    </div>
+</div>
+
+<div class="container content">
+    <table class="table table-dark table-striped table-hover">
+        <thead>
+            <tr>
+                <th>IMG</th>
+                <th>Dish</th>
+                <th>Price</th>
+                <th>Details</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>

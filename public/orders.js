@@ -4,8 +4,23 @@ export default class Orders {
     constructor() {
         this.BACKEND = new Backend();
         this.h1 = document.querySelector('.this');
-        this.refreshTable();
+        this.refreshTable().then(this.handleButtonVisibility);
         this.giveOutEventHandlers();
+        this.BACKEND.checkLogin();
+    }
+    ;
+    async handleButtonVisibility() {
+        let buttons = document.querySelectorAll('.manager');
+        if (localStorage.getItem('LoggedIn') == undefined || localStorage.getItem('LoggedIn') == "false") {
+            buttons.forEach(btn => {
+                btn.style.display = 'none';
+            });
+        }
+        else {
+            buttons.forEach(btn => {
+                btn.style.display = 'block';
+            });
+        }
     }
     async giveOutEventHandlers() {
         document.querySelector('#update').addEventListener('click', (e) => {
@@ -47,7 +62,6 @@ export default class Orders {
             let tr = document.createElement('tr');
             tr.innerHTML = `
                 <tr>
-                    <td>${item.id}</td>
                     <td>${item.guest_name}</td>
                     <td>${item.ordered}</td>
                     <td>${item.order_started}</td>
@@ -59,7 +73,7 @@ export default class Orders {
             let btn = document.createElement('button');
             btn.textContent = 'Delete';
             btn.type = 'button';
-            btn.className = 'btn btn-danger';
+            btn.className = 'btn btn-danger manager';
             btn.addEventListener('click', () => { this.BACKEND.deleteData('orders', item.id); setTimeout(() => { this.refreshTable(); }, 100); });
             td.append(btn);
             tr.append(td);
@@ -67,7 +81,7 @@ export default class Orders {
             btn = document.createElement('button');
             btn.textContent = 'Modify';
             btn.type = 'button';
-            btn.className = 'btn btn-warning';
+            btn.className = 'btn btn-warning manager';
             btn.addEventListener('click', () => {
                 document.querySelector('#modifyOrder').style.display = "block";
                 document.querySelector('#nameField').value = item.guest_name;
