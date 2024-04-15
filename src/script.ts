@@ -2,18 +2,22 @@ import Backend from "./backend.js";
 import Login from "./login.js";
 import Menu from "./menu.js";
 import Orders from "./orders.js";
+import Home from "./home.js";
 
-// default url
+
 const BASE_URL = '/12aBM/project/';
-// oldalak helye:
+
 const rootDiv: any = document.querySelector('#root');
-// nav-ok:
+
 const navs = document.querySelectorAll('a[data-href]');
-// console.log(navs);
+
+let logout = (document.querySelector('#logout') as HTMLButtonElement);
+
+let BACKEND = new Backend();
 
 //route-ok
 const routes: any = {
-    '/'         : {html : './pages/home.html', code : null},    
+    '/'         : {html : './pages/home.html', code : Home},    
     '/menu'         : {html : './pages/menu.html', code: Menu},    
     '/orders'         : {html : './pages/orders.html', code : Orders},    
     '/login'         : {html : './pages/login.html', code : Login},    
@@ -76,15 +80,7 @@ window.addEventListener('load', async ()=>{
         // nem létező oldal
         data = await loadPage(routes['/404']);
     }
-    rootDiv.innerHTML = data;
-        
-    let NavLink_Login = document.querySelector('#login') as HTMLLinkElement;
-    if(localStorage.getItem('LoggedIn') == undefined ||
-    localStorage.getItem('LoggedIn') == "false" ){
-        NavLink_Login.innerText = "Login";
-    }else{
-        NavLink_Login.innerText = (String)(localStorage.getItem('UserName'));
-    }
+    rootDiv.innerHTML = data;            
 
     dynamicClass(routes[routePath]);
 })
@@ -92,4 +88,12 @@ window.addEventListener('load', async ()=>{
 // eseménykezelés
 navs.forEach(nav =>{
     nav.addEventListener('click',onNavClick);
+})
+
+logout.addEventListener('click', ()=>{
+    if(confirm(`Are you sure you want to logout: | ${localStorage.getItem('UserName')} | ?`)) {
+        window.localStorage.setItem('LoggedIn', 'false');            
+        window.localStorage.setItem('UserName', '');
+        BACKEND.checkLogin();
+    }
 })

@@ -28,7 +28,7 @@ export default class Backend{
     // DELETE 
     async deleteData(resource: string, id?:string) {
         // console.log(id);
-        await fetch(`http://localhost:3000/${resource}?id=`+id,{
+        await fetch(`http://localhost:3000/${resource}/`+id,{
             method: "DELETE"
         });
     }
@@ -37,7 +37,7 @@ export default class Backend{
     async updateData(resource: string, data: any) {
         console.log(data);
         
-        await fetch(`http://localhost:3000/${resource}?id=`+data.id,{
+        await fetch(`http://localhost:3000/${resource}/`+data.id,{
             method: 'PUT',
             headers: {
                 "Content-Type": "application/json"
@@ -46,5 +46,20 @@ export default class Backend{
         })
     }
 
+    checkLogin(){
+        if (localStorage.getItem('UserName') == undefined) {
+            window.localStorage.setItem('UserName', '');                     
+        }
+        let logout = (document.querySelector('#logout') as HTMLButtonElement);
+        logout.innerText =  `LogOut: ${localStorage.getItem('UserName')}`;
+        let login = (document.querySelector('#login') as HTMLButtonElement);
+        if (localStorage.getItem('LoggedIn') == undefined || localStorage.getItem('LoggedIn') == "false") {
+            logout.style.display = 'none';
+            login.style.display = 'block';
+        }else{
+            logout.style.display = 'block';
+            login.style.display = 'none';
+        }
+    }
 }
 

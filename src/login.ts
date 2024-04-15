@@ -15,6 +15,7 @@ export default class Login{
     Button_login = document.querySelector('.login') as HTMLButtonElement;
     constructor(){
         this.Button_login.addEventListener('click', this.login);
+        this.BACKEND.checkLogin();
     }
 
     login = async (e: Event)=>{

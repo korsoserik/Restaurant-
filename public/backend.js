@@ -38,4 +38,20 @@ export default class Backend {
             body: JSON.stringify(data)
         });
     }
+    checkLogin() {
+        if (localStorage.getItem('UserName') == undefined) {
+            window.localStorage.setItem('UserName', '');
+        }
+        let logout = document.querySelector('#logout');
+        logout.innerText = `LogOut: ${localStorage.getItem('UserName')}`;
+        let login = document.querySelector('#login');
+        if (localStorage.getItem('LoggedIn') == undefined || localStorage.getItem('LoggedIn') == "false") {
+            logout.style.display = 'none';
+            login.style.display = 'block';
+        }
+        else {
+            logout.style.display = 'block';
+            login.style.display = 'none';
+        }
+    }
 }

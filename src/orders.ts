@@ -13,7 +13,6 @@ interface Dish{
     id?:string
     name_dish:string
     price:string
-    available:number
     img_url?:string
     description:string
 };
@@ -23,8 +22,24 @@ export default class Orders{
     
     h1 = document.querySelector('.this') as HTMLHeadElement;
     constructor(){
-        this.refreshTable();
-        this.giveOutEventHandlers();
+        this.refreshTable().then(this.handleButtonVisibility);
+        this.giveOutEventHandlers();  
+        this.BACKEND.checkLogin();      
+    };
+
+    async handleButtonVisibility(){
+        let buttons: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.manager')
+        
+        if (localStorage.getItem('LoggedIn') == undefined || localStorage.getItem('LoggedIn') == "false") {
+            buttons.forEach(btn => {
+                btn.style.display = 'none';
+                
+        })
+        }else{
+            buttons.forEach(btn => {
+                btn.style.display = 'block';
+            })
+        }
     }
 
     async giveOutEventHandlers() {
@@ -70,7 +85,6 @@ export default class Orders{
             let tr = document.createElement('tr');
             tr.innerHTML =`
                 <tr>
-                    <td>${item.id}</td>
                     <td>${item.guest_name}</td>
                     <td>${item.ordered}</td>
                     <td>${item.order_started}</td>
@@ -82,7 +96,7 @@ export default class Orders{
             let btn = document.createElement('button');
             btn.textContent = 'Delete';
             btn.type='button';
-            btn.className = 'btn btn-danger';
+            btn.className = 'btn btn-danger manager';
             btn.addEventListener('click',()=> {this.BACKEND.deleteData('orders', item.id); setTimeout(()=>{this.refreshTable()}, 100);});
             td.append(btn);
             tr.append(td);
@@ -91,7 +105,7 @@ export default class Orders{
             btn = document.createElement('button');
             btn.textContent = 'Modify';
             btn.type='button';
-            btn.className = 'btn btn-warning';
+            btn.className = 'btn btn-warning manager';
             btn.addEventListener('click',()=> {
                 (document.querySelector('#modifyOrder') as HTMLDivElement).style.display = "block";
                 (document.querySelector('#nameField') as HTMLInputElement).value = item.guest_name;

@@ -19,5 +19,6 @@ export default class Login {
             this.Button_login.disabled = false;
         };
         this.Button_login.addEventListener('click', this.login);
+        this.BACKEND.checkLogin();
     }
 }
