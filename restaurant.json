@@ -33,11 +33,19 @@
       "id": "tAw3C_7"
     },
     {
+<<<<<<< HEAD
       "id": "DypNbvy",
       "guest_name": "Jani",
       "ordered": "something2",
       "order_started": "19:11",
       "status": "Done",
+=======
+      "id": "vQNH5I1",
+      "guest_name": "Jani",
+      "ordered": "something2",
+      "order_started": "11:41",
+      "status": "Recieved",
+>>>>>>> 0cee320b78d03429597ca235877a21a5df2d710e
       "additional_entry": ""
     }
   ],
